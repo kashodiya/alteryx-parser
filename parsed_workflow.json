@@ -5,7 +5,11 @@
     "description": null,
     "author": null,
     "company": null,
-    "copyright": null
+    "copyright": null,
+    "root_tool_name": null,
+    "tool_version": null,
+    "category_name": null,
+    "search_tags": null
   },
   "nodes": [
     {
@@ -41,7 +45,8 @@
       },
       "engine_settings": {
         "dll": "AlteryxBasePluginsEngine.dll",
-        "entry_point": "AlteryxDbFileInput"
+        "entry_point": "AlteryxDbFileInput",
+        "type": "DLL"
       }
     },
     {
@@ -87,7 +92,8 @@
       },
       "engine_settings": {
         "dll": "AlteryxBasePluginsEngine.dll",
-        "entry_point": "AlteryxSelect"
+        "entry_point": "AlteryxSelect",
+        "type": "DLL"
       }
     },
     {
@@ -122,7 +128,8 @@
       },
       "engine_settings": {
         "dll": "AlteryxBasePluginsEngine.dll",
-        "entry_point": "AlteryxDbFileOutput"
+        "entry_point": "AlteryxDbFileOutput",
+        "type": "DLL"
       }
     }
   ],

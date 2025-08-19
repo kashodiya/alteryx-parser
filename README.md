@@ -3,6 +3,14 @@
 
 This repository contains Python scripts to read and parse Alteryx workflow files (.yxmd). Alteryx workflows are stored as XML files containing tool configurations, connections, and metadata.
 
+## Features
+
+This parser handles various types of Alteryx workflows, including:
+- **Custom Plugin Support**: Properly handles third-party and custom tools (e.g., SFTP tools, Python SDK tools)
+- **Complete Metadata Extraction**: Captures workflow information and attributes
+- **Engine Type Classification**: Distinguishes between DLL, Python, and GUI-only tools
+- **Smart Plugin Name Handling**: Correctly identifies both standard and custom plugin names
+
 ## Overview
 
 Alteryx is a self-service data analytics platform that uses a drag-and-drop interface to create workflows. These workflows are saved as `.yxmd` files, which are XML-based files containing:
@@ -77,21 +85,40 @@ python3 minimal_yxmd_reader.py
 ### 5. `parsed_workflow.json`
 Example JSON output showing the structured data extracted from the sample workflow.
 
+### 6. `test_enhanced_parser.py`
+Comprehensive test suite demonstrating the enhanced parser capabilities:
+
+**Features:**
+- Tests multiple workflow types (standard and custom tools)
+- Provides detailed statistics and comparisons
+- Demonstrates engine type classification
+- Shows plugin categorization
+
+**Usage:**
+```bash
+python3 test_enhanced_parser.py
+```
+
 ## Quick Start
 
-1. **Run the basic reader:**
+1. **Test the enhanced parser:**
    ```bash
-   python3 minimal_yxmd_reader.py
+   python3 test_enhanced_parser.py
    ```
 
-2. **Run the focused parser:**
+2. **Run the full parser:**
+   ```bash
+   python3 alteryx_parser.py
+   ```
+
+3. **Run the focused parser:**
    ```bash
    python3 simple_yxmd_parser.py
    ```
 
-3. **Run the full parser:**
+4. **Run the basic reader:**
    ```bash
-   python3 alteryx_parser.py
+   python3 minimal_yxmd_reader.py
    ```
 
 ## Understanding .yxmd File Structure
@@ -166,7 +193,12 @@ def parse_specific_tool(node):
 ## Requirements
 
 - Python 3.6+
-- Standard library only (xml.etree.ElementTree, json, os)
+- No external dependencies (uses standard library only)
+
+Install any optional development dependencies:
+```bash
+pip install -r requirements.txt
+```
 
 ## Sample Output
 

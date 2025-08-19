@@ -1,0 +1,14 @@
+# Alteryx .yxmd File Parser Requirements
+# This parser uses only Python standard library modules
+
+# No external dependencies required
+# The following standard library modules are used:
+# - xml.etree.ElementTree (XML parsing)
+# - json (JSON output)
+# - os (file operations)
+# - typing (type hints)
+
+# For development/testing (optional):
+# pytest>=6.0.0
+# black>=21.0.0
+# flake8>=3.8.0
