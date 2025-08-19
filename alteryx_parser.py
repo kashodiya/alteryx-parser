@@ -59,6 +59,30 @@ class AlteryxWorkflowParser:
                 workflow_info['author'] = self._get_element_text(meta_info, 'Author')
                 workflow_info['company'] = self._get_element_text(meta_info, 'Company')
                 workflow_info['copyright'] = self._get_element_text(meta_info, 'Copyright')
+                
+                # Additional metadata fields
+                workflow_info['root_tool_name'] = self._get_element_text(meta_info, 'RootToolName')
+                workflow_info['tool_version'] = self._get_element_text(meta_info, 'ToolVersion')
+                workflow_info['category_name'] = self._get_element_text(meta_info, 'CategoryName')
+                workflow_info['search_tags'] = self._get_element_text(meta_info, 'SearchTags')
+                
+                # Handle attributes
+                name_is_filename = meta_info.find('NameIsFileName')
+                if name_is_filename is not None:
+                    workflow_info['name_is_filename'] = name_is_filename.get('value')
+                
+                tool_in_db = meta_info.find('ToolInDb')
+                if tool_in_db is not None:
+                    workflow_info['tool_in_db'] = tool_in_db.get('value')
+                
+                # Handle DescriptionLink with attributes
+                desc_link = meta_info.find('DescriptionLink')
+                if desc_link is not None:
+                    workflow_info['description_link'] = {
+                        'actual': desc_link.get('actual', ''),
+                        'displayed': desc_link.get('displayed', ''),
+                        'text': desc_link.text
+                    }
         
         return workflow_info
     
@@ -107,6 +131,15 @@ class AlteryxWorkflowParser:
                         'dll': engine_settings.get('EngineDll'),
                         'entry_point': engine_settings.get('EngineDllEntryPoint')
                     }
+                    
+                    # For Python-based tools, the entry point might be a file path
+                    if node_data['engine_settings']['dll'] == 'Python':
+                        node_data['engine_settings']['type'] = 'Python'
+                    else:
+                        node_data['engine_settings']['type'] = 'DLL'
+                else:
+                    # Some tools (like TextBox) don't have engine settings - they're GUI-only
+                    node_data['engine_settings'] = {'type': 'GUI'}
                 
                 nodes.append(node_data)
         
@@ -181,6 +214,20 @@ class AlteryxWorkflowParser:
         element = parent.find(tag_name)
         return element.text if element is not None else None
     
+    def _extract_plugin_name(self, plugin_string):
+        """Extract a readable plugin name from the plugin string"""
+        if not plugin_string:
+            return 'Unknown'
+        
+        # Check if this looks like a standard Alteryx plugin (has multiple dots and follows naming pattern)
+        if plugin_string.count('.') >= 2 and any(prefix in plugin_string for prefix in ['AlteryxBasePluginsGui', 'AlteryxGuiToolkit', 'AlteryxConnectorGui']):
+            # For standard Alteryx plugins with dots
+            parts = plugin_string.split('.')
+            return parts[-1]
+        else:
+            # For custom plugins (like SKOPOSSFTPDownload_v1.0), return the full name
+            return plugin_string
+    
     def _xml_to_dict(self, element):
         """Convert XML element to dictionary recursively"""
         result = {}
@@ -231,7 +278,7 @@ class AlteryxWorkflowParser:
         nodes = self.workflow_data['nodes']
         print(f"\nNodes: {len(nodes)} tools")
         for i, node in enumerate(nodes, 1):
-            plugin_name = node['plugin'].split('.')[-1] if node['plugin'] else 'Unknown'
+            plugin_name = self._extract_plugin_name(node['plugin']) if node['plugin'] else 'Unknown'
             print(f"  {i}. Tool ID {node['tool_id']}: {plugin_name} at ({node['position'].get('x', 'N/A')}, {node['position'].get('y', 'N/A')})")
         
         # Connections summary
@@ -259,7 +306,7 @@ class AlteryxWorkflowParser:
 def main():
     """Main function to demonstrate the parser"""
     # Example usage
-    yxmd_file = "/workspace/sample_workflow.yxmd"
+    yxmd_file = "/workspace/alteryx-parser/sample_workflow.yxmd"
     
     if not os.path.exists(yxmd_file):
         print(f"File {yxmd_file} not found!")
@@ -276,7 +323,7 @@ def main():
         parser.print_summary()
         
         # Save to JSON
-        parser.save_to_json("/workspace/parsed_workflow.json")
+        parser.save_to_json("/workspace/alteryx-parser/parsed_workflow.json")
         
         # Example: Access specific data
         print("\n" + "="*60)
