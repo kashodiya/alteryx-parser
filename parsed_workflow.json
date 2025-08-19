@@ -1,0 +1,157 @@
+{
+  "workflow_info": {
+    "version": "2023.1",
+    "name": null,
+    "description": null,
+    "author": null,
+    "company": null,
+    "copyright": null
+  },
+  "nodes": [
+    {
+      "tool_id": "1",
+      "plugin": "AlteryxBasePluginsGui.DbFileInput.DbFileInput",
+      "position": {
+        "x": "54",
+        "y": "162"
+      },
+      "configuration": {
+        "Passwords": {},
+        "File": "C:\\Users\\sample\\data.csv",
+        "FormatSpecificOptions": {
+          "HeaderRow": "True",
+          "IgnoreErrors": "False",
+          "AllowShareWrite": "False",
+          "ImportLine": "1",
+          "FieldLen": "254",
+          "SingleThreadRead": "False",
+          "IgnoreQuotes": "DoubleQuotes",
+          "Delimeter": ",",
+          "QuoteRecordBreak": "False",
+          "CodePage": "28591"
+        }
+      },
+      "annotation": {
+        "DisplayMode": "0",
+        "Name": {},
+        "DefaultAnnotationText": "data.csv",
+        "Left": {
+          "value": "False"
+        }
+      },
+      "engine_settings": {
+        "dll": "AlteryxBasePluginsEngine.dll",
+        "entry_point": "AlteryxDbFileInput"
+      }
+    },
+    {
+      "tool_id": "2",
+      "plugin": "AlteryxBasePluginsGui.AlteryxSelect.AlteryxSelect",
+      "position": {
+        "x": "186",
+        "y": "162"
+      },
+      "configuration": {
+        "OrderChanged": {
+          "value": "False"
+        },
+        "CommaDecimal": {
+          "value": "False"
+        },
+        "SelectFields": {
+          "SelectField": [
+            {
+              "field": "ID",
+              "selected": "True"
+            },
+            {
+              "field": "Name",
+              "selected": "True"
+            },
+            {
+              "field": "Age",
+              "selected": "True",
+              "type": "Int32",
+              "size": "4"
+            }
+          ]
+        }
+      },
+      "annotation": {
+        "DisplayMode": "0",
+        "Name": {},
+        "DefaultAnnotationText": {},
+        "Left": {
+          "value": "False"
+        }
+      },
+      "engine_settings": {
+        "dll": "AlteryxBasePluginsEngine.dll",
+        "entry_point": "AlteryxSelect"
+      }
+    },
+    {
+      "tool_id": "3",
+      "plugin": "AlteryxBasePluginsGui.DbFileOutput.DbFileOutput",
+      "position": {
+        "x": "318",
+        "y": "162"
+      },
+      "configuration": {
+        "File": "C:\\Users\\sample\\output.csv",
+        "Passwords": {},
+        "FormatSpecificOptions": {
+          "LineEndStyle": "CRLF",
+          "Delimeter": ",",
+          "ForceQuotes": "False",
+          "HeaderRow": "True",
+          "CodePage": "28591",
+          "WriteBOM": "True"
+        },
+        "MultiFile": {
+          "value": "False"
+        }
+      },
+      "annotation": {
+        "DisplayMode": "0",
+        "Name": {},
+        "DefaultAnnotationText": "output.csv",
+        "Left": {
+          "value": "False"
+        }
+      },
+      "engine_settings": {
+        "dll": "AlteryxBasePluginsEngine.dll",
+        "entry_point": "AlteryxDbFileOutput"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "origin": {
+        "tool_id": "1",
+        "connection": "Output"
+      },
+      "destination": {
+        "tool_id": "2",
+        "connection": "Input"
+      }
+    },
+    {
+      "origin": {
+        "tool_id": "2",
+        "connection": "Output"
+      },
+      "destination": {
+        "tool_id": "3",
+        "connection": "Input"
+      }
+    }
+  ],
+  "properties": {
+    "memory_default": "True",
+    "global_record_limit": "0",
+    "zoom_level": "0",
+    "layout_type": "Horizontal"
+  }
+}
